@@ -1,6 +1,159 @@
+:root {
+  background-image: url(/images/site/checkerboard.jpg);
+  background-size: cover; /* Ensures the background doesn't exceed viewport */
+  background-position: center;
+}
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+body {
+  max-width: 800px;
+  border: 10px solid #A2BCE0;
+  border-radius: 10px;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main {
+  background-color: white;
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#top-header a{
+  text-decoration: none;
+}
+
+
+header, h1, h2, h3 {
+  margin: 0;
+  font-family: "Tinos", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+p, .reviews {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.hero {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+  
+}
+picture img {
+  width: 100%;
+}
+.cta {
+  position: absolute;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+}
+
+nav ul{
+  display: flex;
+  justify-content: space-evenly;
+  list-style-type: none;
+  padding: 1rem;
+  margin: 0;
+  background-color: #BEB8EB;
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: white;
+  margin: 0;
+}
+
+
+figure {
+  text-align: center;
+}
+
+figure img{
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: #BEB8EB;
+}
+.figs figure img {
+  width: 100%;
+  height: auto;
+  max-width: 90%;
+  object-fit: contain; /* Ensures the whole image is visible */
+}
+.upgrades-reviews {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.figs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.reviews li {
+  padding: 0.5rem;
+}
+
+footer {
+  background-color: white;
+  padding: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .siteName {
+    font-size: 2rem;
+  }
+  #tools {
+    font-size: 1.2rem;
+  }
+  .upgrades-reviews {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .figs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .reviews {
+    padding: 1rem;
+  }
+  
+  .reviews li {
+    padding: 0.5rem;
+  }
+  
+  picture img {
+    width: 100%;
+    height: auto;
+  }
+  .cta {
+    position: absolute;
+    left: 50px;
+  }
+  
 }
