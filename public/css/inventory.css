@@ -1,0 +1,147 @@
+/* ========== Vehicle Detail Page Styles ========== */
+.vehicle-detail {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vehicle-detail h2 {
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.vehicle-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px auto;
+}
+
+/* Vehicle Info Grid */
+.vehicle-info {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.vehicle-info p {
+  font-size: 1.2rem;
+  background: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  border-left: 4px solid #007bff;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-info strong {
+  font-weight: bold;
+  color: #222;
+}
+
+/* ========== Modal Styles ========== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center; /* Keeps modal vertically centered */
+  justify-content: center; /* Keeps modal horizontally centered */
+  padding: 20px;
+}
+
+/* Centered Modal Content */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  max-height: 80vh; /* Prevents modal from being too large */
+  overflow: auto; /* Allow scrolling if content is too long */
+  animation: fadeIn 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Ensures content stays centered */
+}
+
+/* Image inside modal */
+.modal-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 30px;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: #d9534f;
+}
+
+/* ======== Responsive Design ======== */
+@media (min-width: 768px) {
+  .vehicle-detail {
+    padding: 10px;
+  }
+
+  .vehicle-detail h2 {
+    font-size: 1.5rem;
+  }
+
+  .vehicle-info {
+    grid-template-columns: 1fr; /* Stack items on smaller screens */
+  }
+
+  .vehicle-info p {
+    font-size: 1rem;
+  }
+
+  /* Adjust modal for small screens */
+  .modal-content {
+    padding: 15px;
+    justify-content: center; /* Keeps it centered */
+    overflow: auto; /* Enable scrolling if content overflows */
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Modal Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
