@@ -1,9 +1,10 @@
 <!--Header -->
 <% if (title) { %>
-    <h1><%= title %></h1>
-    <% } else {
-      res.redirect('/')
-} %>
+  <h1><%= title %></h1>
+<% } else { %>
+  <h1>Inventory</h1>
+<% } %>
+
 
 <!--Message Block -->
 <%# messages() %>
