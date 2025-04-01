@@ -10,7 +10,6 @@ html, body {
   padding: 0;
 }
 main {
-  min-height: 100vh; /* Ensures at least full viewport height */
   overflow-y: auto;  /* Allows scrolling if content exceeds the page */
 }
 
@@ -29,7 +28,6 @@ body {
   padding: 0;
   margin-left: auto;
   margin-right: auto;
-  min-height: 100vh;
 }
 
 main {
@@ -77,6 +75,7 @@ picture img {
 nav ul{
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
   list-style-type: none;
   padding: 1rem;
   margin: 0;
@@ -85,6 +84,7 @@ nav ul{
   font-weight: 700;
   font-style: normal;
 }
+
 
 header {
   display: flex;
@@ -97,6 +97,7 @@ header {
 
 figure {
   text-align: center;
+  height: auto;
 }
 
 figure img{
@@ -109,7 +110,6 @@ figure img{
 .figs figure img {
   width: 100%;
   height: auto;
-  max-width: 90%;
   object-fit: contain; /* Ensures the whole image is visible */
 }
 .upgrades-reviews {
