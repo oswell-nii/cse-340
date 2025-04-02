@@ -11,9 +11,24 @@
     <h1><%= title %></h1>
 
     <!-- Flash Message -->
-    <% if (message) { %>
+    <% if (typeof message !== "undefined" && message !== null) { %>
         <p class="flash-message"><%= message %></p>
     <% } %>
+    
+
+    <% if (errors) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error => { %>
+                <% if (error.msg.includes("Invalid value")) { %>
+                    <li style="list-style-type: none;"><%= error.msg.replace("Invalid value.", "").replace("Invalid value", "").trim() %></li>
+                <% } else { %>
+                    <li><%= error.msg %></li>
+                <% } %>
+            <% }) %>
+        </ul>
+    <% } %>
+    
+    
 
     <!-- Registration Form -->
     <form action="/account/register" method="post">
@@ -27,8 +42,22 @@
         <input type="email" id="account_email" name="account_email" value="" required>
         
         <label for="account_password">Password:</label>
-        <input type="password" id="account_password" name="account_password" required>
-        
+        <div class="password-requirements">
+            Passwords must be at least 12 characters and contain:
+            <ul>
+                <li>At least 1 uppercase letter</li>
+                <li>At least 1 lowercase letter</li>
+                <li>At least 1 number</li>
+                <li>At least 1 special character</li>
+            </ul>
+        </div>
+        <input
+            type="password"
+            id="account_password"
+            name="account_password"
+            required
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+        >        
         <button type="submit">Register</button>
     </form>
 </body>
