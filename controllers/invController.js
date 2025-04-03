@@ -111,19 +111,22 @@ invCont.addClassification = async function (req, res, next) {
 
 // Add Inventory View
 invCont.buildAddInventory = async function (req, res, next) {
-    try {
-        let nav = await utilities.getNav()
-        let classificationList = await utilities.buildClassificationList()
-        res.render("./inventory/add-inventory", {
-            title: "Add Inventory",
-            nav,
-            classificationList,
-            messages: req.flash()
-        })
-    } catch (error) {
-        next(error)
-    }
-}
+  try {
+      let nav = await utilities.getNav();
+      let classificationList = await utilities.buildClassificationList(); // Get latest classifications
+      res.render("./inventory/add-inventory", {
+          title: "Add Inventory",
+          nav,
+          classifications: classificationList, // Pass the dropdown list
+          errors: [],
+          stickyData: {},
+          messages: req.flash()
+      });
+  } catch (error) {
+      next(error);
+  }
+};
+
 
 
 // Method to handle Add New Inventory form submission

@@ -72,22 +72,20 @@ Util.buildVehicleDetail = function (vehicle) {
   return detail
 }
 
-Util.buildClassificationList = function (classification_id) {
-  let select = '<select id="classification_id" name="classification_id">';
-  const classifications = [
-      { id: 1, name: "Sedan" },
-      { id: 2, name: "SUV" },
-      { id: 3, name: "Truck" }
-  ]; // Example static data, replace with dynamic data if needed
+Util.buildClassificationList = async function (classification_id = null) {
+  let data = await invModel.getClassifications(); // Fetch classifications from DB
+  let classificationList = '<select id="classification_id" name="classification_id" required>';
+  classificationList += "<option value=''>Choose a Classification</option>";
 
-  classifications.forEach((classification) => {
-      select += `<option value="${classification.id}" ${
-          classification.id == classification_id ? "selected" : ""
-      }>${classification.name}</option>`;
+  data.rows.forEach((row) => {
+      classificationList += `<option value="${row.classification_id}" 
+          ${classification_id == row.classification_id ? "selected" : ""}>
+          ${row.classification_name}
+      </option>`;
   });
 
-  select += "</select>";
-  return select;
+  classificationList += "</select>";
+  return classificationList;
 };
 
 /* **************************************
