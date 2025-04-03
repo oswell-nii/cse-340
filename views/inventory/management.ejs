@@ -1,54 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Vehicle</title>
-  <link rel="stylesheet" href="/css/management.css"> 
-</head>
+<% if (messages.success) { %>
+  <div class="alert alert-success"><%= messages.success %></div>
+<% } %>
+<% if (messages.error) { %>
+  <div class="alert alert-danger"><%= messages.error %></div>
+<% } %>
 
-<h1><%= title %></h1>
-
-  <!-- Flash message -->
-  <% if (message) { %>
-    <div class="flash-message"><%= message %></div>
-  <% } %>
-
-  <!-- Error messages -->
-  <% if (errors && errors.length) { %>
-    <div class="error-messages">
-      <% errors.forEach((error) => { %>
-        <p class="error"><%= error %></p>
-      <% }); %>
-    </div>
-  <% } %>
-  
-
-  <form method="POST" action="/inventory/add" onsubmit="validateForm(event)">
-    <!-- Classification select list -->
-   
-
-    <!-- Input fields -->
-    <label for="make">Make:</label>
-    <input type="text" id="make" name="make" value="" required>
-
-    <label for="model">Model:</label>
-    <input type="text" id="model" name="model" value="" required>
-
-    <label for="year">Year:</label>
-    <input type="number" id="year" name="year" value="" required>
-
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" value="" required>
-
-    <label for="image_path">Image Path:</label>
-    <input type="text" id="image_path" name="image_path" value="" required>
-
-    <label for="thumbnail_path">Thumbnail Path:</label>
-    <input type="text" id="thumbnail_path" name="thumbnail_path" value="" required>
-
-    <!-- Submit button -->
-    <button type="submit">Add Vehicle</button>
-  </form>
-</body>
-</html>
+<a href="/inv/add-classification">Add New Classification</a>
+<a href="/inv/add-inventory">Add New Inventory</a>
