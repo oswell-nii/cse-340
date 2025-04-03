@@ -43,4 +43,20 @@ invCont.getInventoryDetail = async function (req, res, next) {
   });
 };
 
+/* ***************************
+ *  Render Inventory Management View
+ * ************************** */
+invCont.renderManagementView = async function (req, res) {
+  let nav = await utilities.getNav();
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav,
+    message: req.flash("message"), // Flash message support
+    errors: [],
+    Util: utilities, // Pass the utilities module to the view
+    classification_id: null // Or set a default/fallback if appl
+  });
+};
+
+
 module.exports = invCont

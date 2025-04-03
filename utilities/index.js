@@ -72,6 +72,24 @@ Util.buildVehicleDetail = function (vehicle) {
   return detail
 }
 
+Util.buildClassificationList = function (classification_id) {
+  let select = '<select id="classification_id" name="classification_id">';
+  const classifications = [
+      { id: 1, name: "Sedan" },
+      { id: 2, name: "SUV" },
+      { id: 3, name: "Truck" }
+  ]; // Example static data, replace with dynamic data if needed
+
+  classifications.forEach((classification) => {
+      select += `<option value="${classification.id}" ${
+          classification.id == classification_id ? "selected" : ""
+      }>${classification.name}</option>`;
+  });
+
+  select += "</select>";
+  return select;
+};
+
 /* **************************************
  * Middleware For Handling Errors
  * Wrap other function in this for

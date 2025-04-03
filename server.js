@@ -73,7 +73,7 @@ app.use("/account", accountRoute);
 app.get("/", baseController.buildHome);
 
 // Inventory routes
-app.use("/inv", inventoryRoute);
+app.use("/", inventoryRoute);
 
 
 

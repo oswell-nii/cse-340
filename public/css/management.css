@@ -1,0 +1,108 @@
+/* management.css */
+
+h1 {
+    text-align: center;
+}
+/* General styling for the form container */
+form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style labels and input fields */
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  /* Style for the flash and error messages */
+  .flash-message,
+  .error-messages {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+  }
+  
+  .flash-message {
+    display: none;
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .error-messages {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .error p {
+    margin: 0;
+  }
+  
+  /* Submit button styling */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    form {
+      padding: 15px;
+    }
+  
+    label {
+      font-size: 14px;
+    }
+  
+    input {
+      padding: 8px;
+    }
+  
+    button {
+      padding: 12px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 18px;
+      text-align: center;
+    }
+  
+    form {
+      padding: 10px;
+    }
+  
+    label {
+      font-size: 12px;
+    }
+  
+    button {
+      font-size: 12px;
+    }
+  }

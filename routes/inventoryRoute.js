@@ -3,6 +3,9 @@ const express = require("express")
 const router = new express.Router() 
 const invController = require("../controllers/invController")
 
+// Route to render the inventory management view
+router.get("/inv", invController.renderManagementView);
+
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId);
 

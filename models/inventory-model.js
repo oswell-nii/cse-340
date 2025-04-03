@@ -45,5 +45,24 @@ async function getVehicleById(inv_id) {
   }
 }
 
+async function buildClassificationList(classification_id = null) {
+  const classifications = await invModel.getClassifications(); // Fetch classifications from the database
+  let classificationList = '<select name="classification_id" id="classification_id" required>';
+  classificationList += '<option value="">Select a Classification</option>';
 
-module.exports = { getClassifications, getInventoryByClassificationId, getVehicleById };
+  classifications.rows.forEach((row) => {
+    classificationList += `<option value="${row.classification_id}"`;
+    if (classification_id !== null && row.classification_id === classification_id) {
+      classificationList += ' selected';
+    }
+    classificationList += `>${row.classification_name}</option>`;
+  });
+
+  classificationList += '</select>';
+  return classificationList; // Return the complete dropdown HTML
+}
+
+
+
+
+module.exports = { getClassifications, getInventoryByClassificationId, getVehicleById, buildClassificationList };
