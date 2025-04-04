@@ -6,13 +6,10 @@
 html, body {
   width: 100%;
   overflow-x: hidden;
-  margin: 0;
-  padding: 0;
 }
 main {
   overflow-y: auto;  /* Allows scrolling if content exceeds the page */
 }
-
 
 
 /******* Change Box Model ***************/
@@ -135,8 +132,6 @@ footer {
   list-style: none; /* Removes bullet points */
   padding: 0;
   margin: 0;
-}
-#inv-display {
   display: flex;
   flex-direction: column;
   text-align: center;

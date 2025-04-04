@@ -120,20 +120,28 @@ validate.inventoryRules = () => {
 validate.checkInventoryData = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    let nav = await require("./index").getNav();
-    let classifications = await require("./index").buildClassificationList(
-      req.body.classification_id
-    );
-    res.render("inventory/add-inventory", {
-      title: "Add New Inventory",
-      nav,
-      classifications,
-      errors: errors.array(),
-      stickyData: req.body,
-    });
+      let nav = await utilities.getNav();
+      let classifications = await utilities.buildClassificationList(req.body.classification_id);
+
+      // Collect all error messages in an array
+      let flashErrors = errors.array().map(error => error.msg);
+
+      // Store all errors as a flash message array
+      req.flash("errorList", flashErrors);
+
+      res.render("inventory/add-inventory", {
+          title: "Add New Inventory",
+          nav,
+          classifications,
+          errors: errors.array(),
+          stickyData: req.body,
+          messages: { errorList: req.flash("errorList") } // Retrieve stored flash errors
+      });
   } else {
-    next();
+      next();
   }
 };
+
+
 
 module.exports = validate;

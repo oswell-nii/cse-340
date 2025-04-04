@@ -1,12 +1,28 @@
-<div class="management-page">
-  <% if (messages.success) { %>
-    <div class="alert alert-success"><%= messages.success %></div>
-  <% } %>
-  <% if (messages.error) { %>
-    <div class="alert alert-danger"><%= messages.error %></div>
-  <% } %>
+<h1><%= title %></h1>
 
-  <h1><%= title %></h1>
+
+<div class="management-page">
+  <% if (messages.success && messages.success.length) { %>
+    <div class="flash success">
+      <ul>
+        <% messages.success.forEach(msg => { %>
+          <li><%= msg %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+  
+  <% if (messages.error && messages.error.length) { %>
+    <div class="flash error">
+      <ul>
+        <% messages.error.forEach(msg => { %>
+          <li><%= msg %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+  
+
 
   <div class="action-buttons">
     <a href="/inv/add-classification">Add New Classification</a>
