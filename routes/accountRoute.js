@@ -12,6 +12,12 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin))
 // Route to deliver Registration View
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
+// Default route for logged-in accounts
+router.get("/", 
+    utilities.checkJWTToken,
+    utilities.handleErrors(accountController.buildAccountHome)
+  )
+  
 // Process the registration data
 router.post(
     "/register",
@@ -19,6 +25,15 @@ router.post(
     regValidate.checkRegData,
     utilities.handleErrors(accountController.registerAccount)
 )
+
+// Process the login request
+router.post(
+    "/login",
+    regValidate.loginRules(),
+    regValidate.checkLoginData,
+    utilities.handleErrors(accountController.accountLogin)
+)
+
 
 
 module.exports = router;
