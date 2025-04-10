@@ -203,6 +203,85 @@ invCont.getInventoryJSON = async function (req, res, next) {
   res.json(inventoryData);
 };
 
+/* ***************************
+ *  Render Edit Inventory Form
+ * ************************** */
+invCont.renderEditInventoryForm = async function (req, res, next) {
+  try {
+    // Get the inventory ID from the URL parameters
+    const inv_id = req.params.inv_id;
+
+    // Fetch the vehicle data by inv_id
+    const vehicleData = await invModel.getVehicleById(inv_id);
+
+    // If the vehicle data is not found, return a 404 error
+    if (!vehicleData) {
+      return res.status(404).render("inventory/edit", {
+        title: "Vehicle Not Found",
+        nav: await utilities.getNav(),
+        message: "Sorry, this vehicle does not exist.",
+      });
+    }
+
+    // Fetch the list of classifications to populate the dropdown
+    const classificationList = await utilities.buildClassificationList();
+
+    // Render the edit form with the vehicle data
+    res.render("inventory/edit", {
+      title: `Edit ${vehicleData.inv_make} ${vehicleData.inv_model}`,
+      nav: await utilities.getNav(),
+      vehicleData,  // Pass vehicle data to the form
+      classificationList, // Pass classification options to the form
+      errors: [],  // Placeholder for any validation errors
+    });
+  } catch (error) {
+    next(error); // Pass the error to the error handler
+  }
+};
+
+
+/* ***************************
+ *  Build edit inventory view
+ * ************************** */
+invCont.editInventoryView = async function (req, res, next) {
+  // Parse the inventory_id from the request parameters
+  const inv_id = parseInt(req.params.inv_id)
+
+  try {
+    // Get the navigation HTML
+    let nav = await utilities.getNav()
+
+    // Get the item data from the model using the inv_id
+    const itemData = await invModel.getVehicleById(inv_id)
+
+    // Build the classification select list using the current classification_id
+    const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
+
+    // Combine the make and model for the title
+    const itemName = `${itemData.inv_make} ${itemData.inv_model}`
+
+    // Render the view with the data
+    res.render("./inventory/edit-inventory", {
+      title: "Edit " + itemName, // Set the page title dynamically
+      nav, // Include the navigation
+      classificationSelect, // Include the classification dropdown
+      errors: null, // No errors initially
+      inv_id: itemData.inv_id,
+      inv_make: itemData.inv_make,
+      inv_model: itemData.inv_model,
+      inv_year: itemData.inv_year,
+      inv_description: itemData.inv_description,
+      inv_image: itemData.inv_image,
+      inv_thumbnail: itemData.inv_thumbnail,
+      inv_price: itemData.inv_price,
+      inv_miles: itemData.inv_miles,
+      inv_color: itemData.inv_color,
+      classification_id: itemData.classification_id
+    })
+  } catch (error) {
+    next(error) // Pass any error to the error-handling middleware
+  }
+}
 
 
 module.exports = invCont;

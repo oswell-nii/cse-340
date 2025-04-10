@@ -16,6 +16,8 @@ router.get("/detail/:inv_id", invController.getInventoryDetail);
 
 router.get("/getInventory/:classification_id", Util.handleErrors(invController.getInventoryJSON))
 
+// Route to handle editing a specific inventory item
+router.get("/edit/:inv_id", Util.handleErrors(invController.editInventoryView));  // New route
 
 // Route to render Add New Inventory form
 router.get("/add-inventory", invController.buildAddInventory);
