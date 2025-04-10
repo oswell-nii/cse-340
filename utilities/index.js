@@ -6,7 +6,7 @@ const Util = {}
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
-Util.getNav = async function (req, res, next) {
+Util.getNav = async function (req, res) {
   let data = await invModel.getClassifications()
   console.log(data)
   let list = "<ul>"
@@ -118,5 +118,17 @@ Util.checkJWTToken = (req, res, next) => {
     next()
   }
 }
+
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+ }
 
 module.exports = Util

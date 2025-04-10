@@ -13,7 +13,8 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin))
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 // Default route for logged-in accounts
-router.get("/", 
+router.get("/",
+    utilities.checkLogin,
     utilities.checkJWTToken,
     utilities.handleErrors(accountController.buildAccountHome)
   )
