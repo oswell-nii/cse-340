@@ -6,10 +6,6 @@
   <link rel="stylesheet" href="/css/management.css">
 </head>
 <body>
-  
-</body>
-</html>
-
 <h1><%= title %></h1>
 
 
@@ -41,3 +37,15 @@
     <a href="/inv/add-inventory">Add New Inventory</a>
   </div>
 </div>
+
+<h2>Manage Inventory</h2>
+<p>Choose a Classification to see those inventory items.</p>
+<%- classificationSelect %>
+<table id="inventoryDisplay"></table>
+
+<noscript>Javascript Must be enabled to use this page</noscript>
+<script src="../../js/inventory.js"></script>
+  
+</body>
+</html>
+

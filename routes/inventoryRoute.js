@@ -3,6 +3,7 @@ const express = require("express")
 const router = new express.Router() 
 const invController = require("../controllers/invController")
 const inventoryValidation = require("../utilities/inventory-validation");
+const Util = require("../utilities");
 
 // Route to render the inventory management view
 router.get("/", invController.renderManagementView);
@@ -12,6 +13,9 @@ router.get("/type/:classificationId", invController.buildByClassificationId);
 
 // Route for Inventory Detail View (Dynamically fetches a vehicle by ID)
 router.get("/detail/:inv_id", invController.getInventoryDetail);
+
+router.get("/getInventory/:classification_id", Util.handleErrors(invController.getInventoryJSON))
+
 
 // Route to render Add New Inventory form
 router.get("/add-inventory", invController.buildAddInventory);
@@ -32,6 +36,8 @@ router.post(
     inventoryValidation.checkClassificationData, 
     invController.addClassification
 );
+
+
 // Route to trigger an intentional 500 error
 router.get("/trigger-error", (req, res, next) => {
     next(new Error("Intentional Server Error!"));

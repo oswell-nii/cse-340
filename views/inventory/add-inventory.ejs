@@ -12,15 +12,16 @@
 
 <h1><%= title %></h1>
 
-<% if (messages.errorList && messages.errorList.length > 0) { %>
+<% if (errors && errors.length > 0) { %>
     <div class="alert alert-danger">
-        <ul>
-            <% messages.errorList.forEach(function(error) { %>
-                <li><%= error %></li>
-            <% }); %>
-        </ul>
+      <ul>
+        <% errors.forEach(function(error) { %>
+          <li><%= error.msg %></li>
+        <% }); %>
+      </ul>
     </div>
 <% } %>
+  
 
 
 <form action="/inv/add-inventory" method="POST">
@@ -28,13 +29,13 @@
     <%- classifications %>
 
     <label for="inv_make">Make:</label>
-    <input type="text" name="inv_make" id="inv_make" value="" required />
+    <input type="text" name="inv_make" id="inv_make" value="<%- stickyData.inv_make || '' %>" required />
 
     <label for="inv_model">Model:</label>
-    <input type="text" name="inv_model" id="inv_model" value="" required />
+    <input type="text" name="inv_model" id="inv_model" value="<%- stickyData.inv_model || '' %>" required />
 
     <label for="inv_description">Description:</label>
-    <textarea name="inv_description" id="inv_description" required></textarea>
+    <textarea name="inv_description" id="inv_description" required><%- stickyData.inv_description || '' %></textarea>
 
     <label for="inv_image">Image Path:</label>
     <input type="text" name="inv_image" id="inv_image" value="<%- stickyData.inv_image || '/images/vehicles/no-image.png' %>" required />
@@ -43,16 +44,16 @@
     <input type="text" name="inv_thumbnail" id="inv_thumbnail" value="<%- stickyData.inv_thumbnail || '/images/vehicles/no-image-thumb.png' %>" required />
 
     <label for="inv_price">Price:</label>
-    <input type="number" name="inv_price" id="inv_price" value="" required />
+    <input type="number" name="inv_price" id="inv_price" value="<%- stickyData.inv_price || '' %>" required />
 
     <label for="inv_year">Year:</label>
-    <input type="number" name="inv_year" id="inv_year" value="" required />
+    <input type="number" name="inv_year" id="inv_year" value="<%- stickyData.inv_year || '' %>" required />
 
     <label for="inv_miles">Miles:</label>
-    <input type="number" name="inv_miles" id="inv_miles" value="" required />
+    <input type="number" name="inv_miles" id="inv_miles" value="<%- stickyData.inv_miles || '' %>" required />
 
     <label for="inv_color">Color:</label>
-    <input type="text" name="inv_color" id="inv_color" value="" required />
+    <input type="text" name="inv_color" id="inv_color" value="<%- stickyData.inv_color || '' %>" required />
 
     <button type="submit">Add Inventory</button>
 </form>

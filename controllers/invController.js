@@ -46,15 +46,17 @@ invCont.getInventoryDetail = async function (req, res, next) {
 /* ***************************
  *  Render Inventory Management View
  * ************************** */
-invCont.renderManagementView = async function (req, res) {
+invCont.renderManagementView = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const classificationSelect = await utilities.buildClassificationList()
   res.render("inventory/management", {
     title: "Inventory Management",
     nav,
     messages: { success: req.flash("success"), error: req.flash("error") }, // Ensure messages are passed correctly
     errors: [],
     Util: utilities, // Pass the utilities module to the view
-    classification_id: null // Or set a default/fallback if appl
+    classification_id: null,
+    classificationSelect, // Or set a default/fallback if appl
   });
 };
 
@@ -113,14 +115,15 @@ invCont.addClassification = async function (req, res, next) {
 invCont.buildAddInventory = async function (req, res, next) {
   try {
       let nav = await utilities.getNav();
-      let classificationList = await utilities.buildClassificationList(); // Get latest classifications
+      const classificationSelect = await utilities.buildClassificationList(); // Get latest classifications
       res.render("./inventory/add-inventory", {
           title: "Add Inventory",
           nav,
           classifications: classificationList, // Pass the dropdown list
           errors: [],
           stickyData: {},
-          messages: { error: req.flash("error") } // Pass flash messages explicitly
+          messages: { error: req.flash("error") },
+          classificationSelect,
         });
   } catch (error) {
       next(error);
@@ -190,6 +193,16 @@ invCont.addInventory = async function (req, res, next) {
       });
   }
 };
+
+invCont.getInventoryJSON = async function (req, res, next) {
+  const classification_id = req.params.classification_id;
+  const inventoryData = await invModel.getInventoryByClassificationId(classification_id);
+  if (!inventoryData || inventoryData.length === 0) {
+    return res.status(404).json({ message: "No inventory found for this classification." });
+  }
+  res.json(inventoryData);
+};
+
 
 
 module.exports = invCont;

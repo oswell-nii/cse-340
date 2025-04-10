@@ -1,16 +1,16 @@
 
 
 <main>
-  <% if (message) { %>
-    <div class="flash-message"><%= message %></div>
-  <% } %>
-  <% if (errors && errors.length > 0) { %>
-    <ul class="errors">
-      <% errors.forEach(function(error) { %>
-        <li><%= error %></li>
-      <% }) %>
-    </ul>
-  <% } %>
-
-  <h1>Welcome <%= accountData.account_firstname %>!</h1>
+    <% if (message) { %>
+      <div class="flash-message"><%= message %></div>
+    <% } %>
+    <% if (errors && errors.length > 0) { %>
+      <ul class="errors">
+        <% errors.forEach(function(error) { %>
+          <li><%= error %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  
+    <h1>Welcome <%= accountData.account_firstname %>!</h1>
 </main>
