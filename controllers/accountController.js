@@ -3,6 +3,8 @@ const accountModel = require("../models/account-model")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const bcrypt = require("bcryptjs")
+const checkJWTToken = require('../middleware/checkJWTToken');
+
 
 /* ****************************************
 *  Deliver login view
@@ -121,10 +123,96 @@ async function buildAccountHome(req, res, next) {
   });
 }
 
+
+
+
+/* ****************************************
+ *  Show the update account form
+ * *************************************** */
+async function showUpdateForm(req, res) {
+  const accountId = parseInt(req.params.accountId);
+  let nav = await utilities.getNav();
+
+  try {
+    const accountData = await accountModel.getAccountById(accountId);
+
+    if (!accountData) {
+      return res.status(404).render("account/update-account", {
+        title: "Update Account",
+        nav,
+        accountData: null,
+        loggedin: true,
+        message: "Account not found.",
+      });
+    }
+
+    res.render("account/update-account", {
+      title: "Update Account",
+      nav,
+      accountData,
+      loggedin: true,
+    });
+  } catch (error) {
+    console.error("Error fetching account data:", error);
+    res.status(500).render("account/update-account", {
+      title: "Update Account",
+      nav,
+      accountData: null,
+      loggedin: true,
+      message: "Error loading update form.",
+    });
+  }
+}
+
+/* ****************************************
+ *  Handle account update process
+ * *************************************** */
+async function updateAccount(req, res) {
+  const { account_id, account_firstname, account_lastname, account_email } = req.body;
+  let nav = await utilities.getNav();
+
+  try {
+    const updatedAccount = await accountModel.updateAccount(
+      account_id,
+      account_firstname,
+      account_lastname,
+      account_email
+    );
+
+    if (updatedAccount) {
+      req.flash("notice", "Account successfully updated.");
+      res.redirect(`/account/`);
+    } else {
+      req.flash("notice", "Error updating account information.");
+      const accountData = await accountModel.getAccountById(account_id);
+      res.render("account/update-account", {
+        title: "Update Account",
+        nav,
+        accountData,
+        loggedin: true,
+        message: "There was an error updating your information.",
+      });
+    }
+  } catch (error) {
+    req.flash("notice", "Error updating account information.");
+    console.error("Error updating account:", error);
+    const accountData = await accountModel.getAccountById(account_id);
+    res.render("account/update-account", {
+      title: "Update Account",
+      nav,
+      accountData,
+      loggedin: true,
+      message: "There was an error updating your information.",
+    });
+  }
+}
 module.exports = {
   buildLogin,
   buildRegister,
   registerAccount,
   accountLogin,
   buildAccountHome,
+  showUpdateForm,
+  updateAccount,
 };
+

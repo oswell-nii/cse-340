@@ -1,6 +1,7 @@
 
 
 <main>
+    <h1>Welcome <%= accountData.account_firstname %>!</h1>
     <% if (message) { %>
       <div class="flash-message"><%= message %></div>
     <% } %>
@@ -11,6 +12,13 @@
         <% }) %>
       </ul>
     <% } %>
-  
-    <h1>Welcome <%= accountData.account_firstname %>!</h1>
+    <% if (loggedin) { %>
+      <p>
+        <a href="/account/edit" class="btn-edit-account">
+          <i class="fas fa-user-edit"></i> Edit Account Information
+        </a>
+      </p>
+    <% } %>
+    
+    
 </main>

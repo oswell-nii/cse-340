@@ -1,49 +1,56 @@
-// Needed Resources 
-const express = require("express")
-const router = new express.Router() 
-const invController = require("../controllers/invController")
+// Needed Resources
+const express = require("express");
+const router = new express.Router();
+const invController = require("../controllers/invController");
 const inventoryValidation = require("../utilities/inventory-validation");
 const Util = require("../utilities");
+const adminEmployeeAccess = require("../middleware/checkAdminAccess");
 
-// Route to render the inventory management view
+// Inventory Management Views
 router.get("/", invController.renderManagementView);
 
-// Route to build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId);
+// Public Routes (No Middleware Required)
+router.get("/type/:classificationId", invController.buildByClassificationId); // Classification view
+router.get("/detail/:inv_id", invController.getInventoryDetail);              // Vehicle detail view
 
-// Route for Inventory Detail View (Dynamically fetches a vehicle by ID)
-router.get("/detail/:inv_id", invController.getInventoryDetail);
+// Restricted Routes (Requires Admin/Employee Access)
+router.get("/admin", adminEmployeeAccess, (req, res) => {
+    res.render('adminView'); // Render admin-specific view
+});
 
-router.get("/getInventory/:classification_id", Util.handleErrors(invController.getInventoryJSON))
-
-// Route to handle editing a specific inventory item
-router.get("/edit/:inv_id", Util.handleErrors(invController.editInventoryView));  // New route
-
-// Route to render Add New Inventory form
-router.get("/add-inventory", invController.buildAddInventory);
-
-// Route to handle Add New Inventory form submission
-router.post(
-    "/add-inventory",
-    inventoryValidation.inventoryRules(),
-    inventoryValidation.checkInventoryData,
+router.post("/add-inventory", 
+    adminEmployeeAccess, 
+    inventoryValidation.inventoryRules(), 
+    inventoryValidation.checkInventoryData, 
     invController.addInventory
 );
 
-router.get("/add-classification", invController.buildAddClassification);
+router.post("/update", 
+    adminEmployeeAccess, 
+    inventoryValidation.inventoryRules(), 
+    inventoryValidation.checkInventoryData, 
+    Util.handleErrors(invController.updateInventory)
+);
 
+router.get("/edit/:inv_id", adminEmployeeAccess, Util.handleErrors(invController.editInventoryView)); 
+
+// Classification Management Routes
+router.get("/add-classification", adminEmployeeAccess, invController.buildAddClassification);
 router.post(
-    "/add-classification",
+    "/add-classification", 
+    adminEmployeeAccess, 
     inventoryValidation.classificationRules(), 
     inventoryValidation.checkClassificationData, 
     invController.addClassification
 );
 
+// Public JSON Data Route
+router.get("/getInventory/:classification_id", Util.handleErrors(invController.getInventoryJSON));
 
-// Route to trigger an intentional 500 error
+// Error Testing Route
 router.get("/trigger-error", (req, res, next) => {
     next(new Error("Intentional Server Error!"));
-  });
-  
+});
 
+// Export Routes
 module.exports = router;

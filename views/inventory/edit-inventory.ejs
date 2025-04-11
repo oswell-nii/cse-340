@@ -1,5 +1,5 @@
 <main>
-    <h1>Edit Inventory: <%= inv_make %> <%= inv_model %> <%= inv_year %></h1>
+    <h1>Edit Vehicle</h1>
 
     <!-- Display any validation or error messages -->
     <% if (errors && errors.length > 0) { %>
@@ -12,7 +12,7 @@
     
 
     <!-- Inventory Edit Form -->
-    <form action="/inv/edit/<%= inv_id %>" method="POST" enctype="multipart/form-data">
+    <form action="/inv/update" method="POST" enctype="multipart/form-data">
         <div>
             <label for="inv_make">Make:</label>
             <input type="text" id="inv_make" name="inv_make" value="<%- inv_make %>" required>
@@ -58,7 +58,11 @@
             <input type="text" id="inv_color" name="inv_color" value="<%- inv_color %>" required>
         </div>
 
-        <button type="submit">Save Changes</button>
+        <button type="submit">Update vehicle</button>
+
+        <input type="hidden" name="inv_id"
+        <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+        <% } %>>
     </form>
 
     <a href="/inv/detail/<%= inv_id %>">Cancel</a>

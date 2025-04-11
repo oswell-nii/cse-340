@@ -143,5 +143,54 @@ validate.checkInventoryData = async (req, res, next) => {
 };
 
 
+validate.checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  // Destructure variables from the request body, including inv_id
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id
+  } = req.body;
+
+  if (!errors.isEmpty()) {
+    const nav = await utilities.getNav();
+    const classifications = await utilities.buildClassificationList(classification_id);
+
+    // Collect error messages
+    const flashErrors = errors.array().map(error => error.msg);
+    req.flash("errorList", flashErrors);
+
+    res.render("inventory/edit-inventory", {
+      title: `Edit ${inv_make} ${inv_model}`, // Matches controller title
+      nav,
+      classificationSelect: classifications,
+      errors: errors.array(),
+      messages: { errorList: req.flash("errorList") },
+      inv_id, // Ensures inv_id is available in the view
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id
+    });
+  } else {
+    next();
+  }
+};
+
 
 module.exports = validate;
