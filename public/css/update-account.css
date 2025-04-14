@@ -1,0 +1,75 @@
+/* Container to center and size the form */
+.form-wrapper {
+    max-width: 600px;         /* Set desired width */
+    width: 90%;               /* Responsive for small screens */
+    margin: 2rem auto;        /* Center horizontally */
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Headings */
+  h2, h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Labels and Inputs */
+  form label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"] {
+    width: 100%;
+    padding: 0.7rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+  
+  /* Buttons */
+  form button {
+    margin-top: 1.5rem;
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Errors */
+  .form-errors {
+    background-color: #ffe6e6;
+    border: 1px solid #ff4d4d;
+    color: #b30000;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Password info box */
+  .password-requirements {
+    background-color: #eef6ff;
+    border-left: 5px solid #007bff;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  
