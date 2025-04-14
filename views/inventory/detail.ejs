@@ -2,3 +2,45 @@
 <main>
   <%- vehicleDetail %>
 </main>
+
+<section class="reviews">
+  <h2>Customer Reviews</h2>
+
+  <% if (reviews && reviews.length > 0) { %>
+    <ul>
+      <% reviews.forEach(review => { %>
+        <li>
+          <strong><%= review.account_firstname %> <%= review.account_lastname %></strong> 
+          on <%= new Date(review.review_date).toLocaleDateString() %>:
+          <p><%= review.review_text %></p>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>No reviews yet. Be the first to write one!</p>
+  <% } %>
+
+  <% if (locals.accountData) { %>
+    <h3>Write a Review</h3>
+
+    <% if (errors && errors.length > 0) { %>
+      <div class="form-errors">
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+    <form action="/reviews/add" method="post">
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+      <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+
+      <textarea name="review_text" id="review_text" rows="4" required></textarea>
+
+      <button type="submit">Submit Review</button>
+    </form>
+  <% } else { %>
+    <p><a href="/account/login">Log in</a> to write a review.</p>
+  <% } %>
+</section>

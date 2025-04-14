@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const reviewModel = require("../models/reviewModel");
 const utilities = require("../utilities/")
 const inventoryValidation = require("../utilities/inventory-validation"); // Adjust the path as needed
 const invCont = {}
@@ -23,8 +24,8 @@ invCont.buildByClassificationId = async function (req, res, next) {
  *  Build inventory detail view
  * ************************** */
 invCont.getInventoryDetail = async function (req, res, next) {
-  const inv_id = req.params.inv_id; // Get vehicle ID from URL
-  const vehicleData = await invModel.getVehicleById(inv_id); // Fetch vehicle details
+  const inv_id = req.params.inv_id;
+  const vehicleData = await invModel.getVehicleById(inv_id);
 
   if (!vehicleData) {
     return res.status(404).render("inventory/detail", {
@@ -34,14 +35,19 @@ invCont.getInventoryDetail = async function (req, res, next) {
     });
   }
 
-  const vehicleDetail = utilities.buildVehicleDetail(vehicleData); // Generate HTML for vehicle
+  const vehicleDetail = utilities.buildVehicleDetail(vehicleData);
+  const reviews = await reviewModel.getReviewsByInventoryId(inv_id);
 
   res.render("inventory/detail", {
     title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
     nav: await utilities.getNav(),
     vehicleDetail,
+    inv_id,
+    loggedIn: res.locals.loggedIn,
+    reviews,
+    errors: []
   });
-};
+}
 
 /* ***************************
  *  Render Inventory Management View

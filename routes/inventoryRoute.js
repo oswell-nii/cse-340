@@ -5,9 +5,22 @@ const invController = require("../controllers/invController");
 const inventoryValidation = require("../utilities/inventory-validation");
 const Util = require("../utilities");
 const adminEmployeeAccess = require("../middleware/checkAdminAccess");
+const reviewController = require("../controllers/reviewController")
+const reviewValidation = require("../utilities/review-validation");
+
 
 // Inventory Management Views
 router.get("/", invController.renderManagementView);
+
+router.post("/submit-review", Util.checkLogin, reviewController.postReview)
+
+router.post(
+    "/detail/:inv_id",
+    Util.checkLogin,
+    reviewValidation.reviewRules(),
+    reviewValidation.checkReviewData,
+    reviewController.postReview
+  );
 
 // Public Routes (No Middleware Required)
 router.get("/type/:classificationId", invController.buildByClassificationId); // Classification view

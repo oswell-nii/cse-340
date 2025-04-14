@@ -40,6 +40,24 @@ CREATE TABLE IF NOT EXISTS public.account
     CONSTRAINT account_pkey PRIMARY KEY (account_id)
 );
 
+-- Table structure for table `reviews`
+CREATE TABLE IF NOT EXISTS public.reviews (
+    review_id SERIAL PRIMARY KEY,
+    review_text TEXT NOT NULL,
+    review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    inv_id INT NOT NULL,
+    account_id INT NOT NULL,
+    CONSTRAINT fk_reviews_inventory FOREIGN KEY (inv_id)
+        REFERENCES public.inventory (inv_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_reviews_account FOREIGN KEY (account_id)
+        REFERENCES public.account (account_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+
 -- Data for table `classification`
 INSERT INTO public.classification (classification_name)
 VALUES ('Custom'),
