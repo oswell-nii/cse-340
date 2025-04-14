@@ -1,5 +1,6 @@
 const utilities = require(".")
 const { body, validationResult } = require("express-validator")
+const accountModel = require("../models/account-model")
 const validate = {}
 
 
@@ -143,18 +144,18 @@ validate.checkUpdateData = async (req, res, next) => {
   let errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const accountData = await utilities.getAccountById(account_id);
+    const accountData = await accountModel.getAccountById(account_id);
     res.render("account/update-account", {
-      errors,
+      errors: errors.array(), // FIXED LINE
       title: "Update Account",
       accountData,
     });
     return;
   }
-
+  
   // Check if the email is already in use (if it has been changed)
   const existingAccount = await accountModel.getAccountByEmail(account_email);
-  if (existingAccount && existingAccount.account_id !== account_id) {
+  if (existingAccount && existingAccount.account_id !== parseInt(account_id)) {
     req.flash("notice", "Email is already in use.");
     return res.redirect(`/account/update/${account_id}`);
   }
@@ -184,7 +185,7 @@ validate.checkPasswordData = async (req, res, next) => {
   let errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const accountData = await utilities.getAccountById(account_id);
+    const accountData = await accountModel.getAccountById(account_id);
     res.render("account/update-account", {
       errors,
       title: "Update Account",

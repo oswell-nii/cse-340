@@ -119,6 +119,7 @@ async function buildAccountHome(req, res, next) {
     nav,
     message: "You're logged in",
     errors: null,
+    messages: req.flash(),
     accountData: res.locals.accountData,
   });
 }
@@ -181,7 +182,8 @@ async function updateAccount(req, res) {
 
     if (updatedAccount) {
       req.flash("notice", "Account successfully updated.");
-      res.redirect(`/account/`);
+      console.log("✅ Update successful, redirecting to /account");
+      res.redirect(`/account`);
     } else {
       req.flash("notice", "Error updating account information.");
       const accountData = await accountModel.getAccountById(account_id);
@@ -206,6 +208,43 @@ async function updateAccount(req, res) {
     });
   }
 }
+
+async function updatePassword(req, res) {
+  const { account_id, account_password } = req.body;
+  
+  try {
+    const hashedPassword = await bcrypt.hash(account_password, 10);
+    const updateResult = await accountModel.updatePassword(account_id, hashedPassword);
+
+    if (updateResult) {
+      req.flash("notice", "Password successfully updated.");
+      res.redirect("/account");
+    } else {
+      req.flash("notice", "Password update failed.");
+      const nav = await utilities.getNav();
+      const accountData = await accountModel.getAccountById(account_id);
+      res.status(400).render("account/update-account", {
+        title: "Update Account",
+        nav,
+        accountData,
+        message: "There was a problem updating your password.",
+      });
+    }
+  } catch (err) {
+    console.error("Error updating password:", err);
+    req.flash("notice", "There was a server error updating your password.");
+    const nav = await utilities.getNav();
+    const accountData = await accountModel.getAccountById(account_id);
+    res.status(500).render("account/update-account", {
+      title: "Update Account",
+      nav,
+      accountData,
+      message: "Server error. Please try again later.",
+    });
+  }
+}
+
+
 module.exports = {
   buildLogin,
   buildRegister,
@@ -214,5 +253,6 @@ module.exports = {
   buildAccountHome,
   showUpdateForm,
   updateAccount,
+  updatePassword
 };
 

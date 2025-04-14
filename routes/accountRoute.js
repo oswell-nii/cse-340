@@ -4,7 +4,7 @@ const router = new express.Router()
 const accountController = require("../controllers/accountController")
 const utilities = require("../utilities")
 const regValidate = require('../utilities/account-validation')
-const checkJWTToken = require('../middleware/checkJWTToken'); // ✅ This should now work
+const checkJWTToken = require('../middleware/checkJWTToken'); 
 
 
 
@@ -39,11 +39,16 @@ router.post(
 
 
 // Show the update account view
-router.get('/update/:accountId', utilities.checkLogin, checkJWTToken, utilities.handleErrors(accountController.showUpdateForm));
+router.get('/update/:accountId', 
+    utilities.checkLogin, 
+    utilities.checkJWTToken, 
+    utilities.handleErrors(accountController.showUpdateForm)
+);
 
 // Process account update request
 router.post(
   '/update',
+  utilities.checkJWTToken,
   regValidate.updateAccountRules(),
   regValidate.checkUpdateData,
   utilities.handleErrors(accountController.updateAccount)
