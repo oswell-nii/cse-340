@@ -1,40 +1,53 @@
-const { body, validationResult } = require("express-validator")
-const utilities = require(".")
+const { body, validationResult } = require("express-validator");
 
+/**
+ * Defines validation rules for vehicle reviews
+ * @returns {Array} Array of validation middleware
+ */
 const reviewRules = () => {
   return [
-    body("review_text")
-      .trim()
-      .notEmpty()
-      .withMessage("Review text cannot be empty.")
-      .isLength({ min: 5 })
-      .withMessage("Review must be at least 5 characters long."),
-  ]
-}
 
-const checkReviewData = async (req, res, next) => {
-  const errors = validationResult(req)
-  const { inv_id, review_text } = req.body
+    // Validate review text - must not be empty
+    body("reviewText")
+      .notEmpty()
+      .withMessage("Review text is required")
+      .isLength({ min: 3, max: 1000 })
+      .withMessage("Review text must be between 3 and 1000 characters"),
+
+    // Validate vehicleId - must exist
+    body("inv_id")
+      .notEmpty()
+      .withMessage("Vehicle ID is required")
+      .isInt()
+      .withMessage("Vehicle ID must be a number"),
+  ];
+};
+
+/**
+ * Checks validation results and handles errors
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @returns {Object|void} Returns error response or proceeds to next middleware
+ */
+const checkValidationResults = (req, res, next) => {
+  const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    const nav = await utilities.getNav()
-    const vehicleData = await require("../models/inventory-model").getVehicleById(inv_id)
-    const vehicleDetail = utilities.buildVehicleDetail(vehicleData)
-    const reviews = await require("../models/reviewModel").getReviewsByInvId(inv_id)
+    console.error("Validation Errors:", errors.array()); // Log validation errors for debugging
 
-    res.render("inventory/detail", {
-      title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
-      nav,
-      vehicleDetail,
-      reviews,
-      inv_id,
-      errors: errors.array(),
-      review_text,
-    })
-    return
+    const errorMessages = errors
+      .array()
+      .map((err) => err.msg)
+      .join(" ");
+    req.flash("notice", errorMessages);
+    return res.redirect(`/inventory/detail/${req.body.inv_id}`);
   }
 
-  next()
-}
+  next();
+};
 
-module.exports = { reviewRules, checkReviewData }
+module.exports = {
+  reviewRules,
+  checkValidationResults,
+};

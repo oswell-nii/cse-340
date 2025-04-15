@@ -26,6 +26,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
 invCont.getInventoryDetail = async function (req, res, next) {
   const inv_id = req.params.inv_id;
   const vehicleData = await invModel.getVehicleById(inv_id);
+  const reviews = await reviewModel.getReviewsByVehicleId(inv_id);
 
   if (!vehicleData) {
     return res.status(404).render("inventory/detail", {
@@ -36,15 +37,17 @@ invCont.getInventoryDetail = async function (req, res, next) {
   }
 
   const vehicleDetail = utilities.buildVehicleDetail(vehicleData);
-  const reviews = await reviewModel.getReviewsByInventoryId(inv_id);
 
   res.render("inventory/detail", {
     title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
     nav: await utilities.getNav(),
+    inv_id: req.params.inv_id, // <-- Make sure this is here
     vehicleDetail,
-    inv_id,
+    vehicle: vehicleData, // <-- Add this line
+
     loggedIn: res.locals.loggedIn,
     reviews,
+    messages: req.flash("success"),
     errors: []
   });
 }

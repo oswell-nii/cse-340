@@ -13,13 +13,12 @@ const static = require("./routes/static");
 const baseController = require("./controllers/baseController");
 const inventoryRoute = require("./routes/inventoryRoute");
 const utilities = require("./utilities/");
-const session = require("express-session")
-const pool = require('./database/')
+const session = require("express-session");
+const pool = require('./database/');
 const accountRoute = require('./routes/accountRoute');
-const bodyParser = require("body-parser")
-const cookieParser = require("cookie-parser")
+const reviewRoutes = require("./routes/reviewRoutes");
 
-
+const cookieParser = require("cookie-parser");
 
 
 /* ***********************
@@ -27,10 +26,18 @@ const cookieParser = require("cookie-parser")
  *************************/
 app.use(express.static("public"));
 
-
 /* ***********************
  * Middleware
- * ************************/
+ *************************/
+
+// Cookie Parser - should come before session
+app.use(cookieParser());
+
+// Body Parsers - using express built-ins
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Session middleware
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -40,24 +47,19 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   name: 'sessionId',
-}))
+}));
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+// Flash messages
+app.use(require('connect-flash')());
 
-//For cookieParser
-app.use(cookieParser())
+// JWT token checker
+app.use(utilities.checkJWTToken);
 
-// Login Process
-app.use(utilities.checkJWTToken)
-
-// Express Messages Middleware
-app.use(require('connect-flash')())
+// Express messages support for views
 app.use(function(req, res, next){
-  res.locals.messages = require('express-messages')(req, res)
-  next()
-})
-
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 
 
 /* ***********************
@@ -65,8 +67,7 @@ app.use(function(req, res, next){
  *************************/
 app.set("view engine", "ejs");
 app.use(expressLayouts);
-app.set("layout", "./layouts/layout") ;// not at views root
-
+app.set("layout", "./layouts/layout"); // not at views root
 
 
 /* ***********************
@@ -83,32 +84,31 @@ app.get("/", baseController.buildHome);
 // Inventory routes
 app.use("/inv", inventoryRoute);
 
+// Review routes
+app.use("/reviews", reviewRoutes);
 
 
-
-
-
-
-// File Not Found Route - must be last route in list
+/* ***********************
+ * File Not Found Route - must be last route in list
+ *************************/
 app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+  next({ status: 404, message: 'Sorry, we appear to have lost that page.' });
 });
 
 
 /* ***********************
-* Express Error Handler
-* Place after all other middleware
-*************************/
+ * Express Error Handler
+ * Place after all other middleware
+ *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  let nav = await utilities.getNav();
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
   res.render("errors/error", {
     title: err.status || 'Server Error',
     message: err.message,
     nav,
   });
 });
-
 
 
 /* ***********************
@@ -122,5 +122,5 @@ const host = process.env.HOST;
  * Log statement to confirm server operation
  *************************/
 app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
+  console.log(`app listening on ${host}:${port}`);
 });
