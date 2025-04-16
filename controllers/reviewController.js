@@ -7,22 +7,34 @@ const reviewModel = require("../models/reviewModel");
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function
  */
-async function getVehicleReviews(req, res, next) {
+async function getVehicleReviews(req, res) {
+  const { inv_id } = req.params;
+
   try {
-    const inv_id = req.params.inv_id;
+    // Fetch reviews and reviewer data from the database
+    const query = `
+      SELECT 
+        r.review_text,
+        r.review_date,
+        a.account_firstname,
+        a.account_lastname
+      FROM reviews r
+      JOIN account a ON r.account_id = a.account_id
+      WHERE r.inv_id = $1
+      ORDER BY r.review_date DESC
+    `;
+    const result = await pool.query(query, [inv_id]);
+    const reviews = result.rows;
 
-    if (!inv_id) {
-      req.flash("notice", "Invalid vehicle ID");
-      return res.redirect("/inventory");
-    }
-
-    const reviews = await reviewModel.getReviewsByVehicleId(inv_id);
-    req.reviews = reviews;
-    next();
+    // Pass data to the EJS template
+    res.render("vehicle", {
+      vehicle: { inv_id }, // Make sure to pass the vehicle data too
+      reviews,
+      loggedin: req.session.loggedin, // Whether the user is logged in
+    });
   } catch (error) {
-    console.error("Error in getVehicleReviews:", error);
-    req.flash("notice", "Failed to retrieve reviews");
-    next(error);
+    console.error("Error fetching reviews:", error);
+    res.status(500).send("Error fetching reviews");
   }
 }
 
